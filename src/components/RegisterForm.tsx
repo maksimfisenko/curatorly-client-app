@@ -1,50 +1,101 @@
-import { Button, Center, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, HStack, Input, Link, Separator } from "@chakra-ui/react";
+import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Link, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
+import { z } from "zod";
+import { FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const registerFormSchema = z
+    .object({
+        name: z.string().nonempty("Имя не должно быть пустым").max(15, "Имя не может быть длиннее 15 символов"),
+        surname: z.string().nonempty("Фамилия не должна быть пустой").max(15, "Фамилия не может быть длиннее 15 символов"),
+        email: z.string().email("Некорректный адрес электронной почты").max(30, "Электронная почта не может быть длиннее 30 символов"),
+        password: z.string().min(8, "Пароль должен содержать минимум 8 символов").max(30, "Пароль не может быть длиннее 30 символов"),
+        passwordConfirmation: z.string().min(8, "Пароль должен содержать минимум 8 символов").max(30, "Пароль не может быть длиннее 30 символов")
+    })
+    .refine(
+        ({password, passwordConfirmation}) => {
+            return password === passwordConfirmation
+        },
+        {
+            message: "Пароли не совпадают",
+            path: ["passwordConfirmation"]
+        }
+    );
+
+type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 const RegisterForm = () => {
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors}
+    } = useForm<RegisterFormData>({
+        resolver: zodResolver(registerFormSchema)
+    });
+
+    const handleFormSubmit = (registerRequest: FieldValues) => {
+        console.log('register request', registerRequest)
+    };
+
     return (
         <Flex flex={1} align={"center"} justify={"center"}>
-            <Center border={"1px solid"} borderRadius={"md"} p={6}>
-                <FieldsetRoot size={"lg"} maxW={"md"}>
-                    <FieldsetLegend textAlign={"center"} fontSize={"xl"}>
-                        Регистрация
-                    </FieldsetLegend>
+            <form onSubmit={handleSubmit(handleFormSubmit)} autoComplete="off" noValidate>
+                <Center border={"1px solid"} borderRadius={"md"} p={6} width={"25vw"}>
+                    <FieldsetRoot size={"lg"} maxW={"md"}>
+                        <FieldsetLegend textAlign={"center"} fontSize={"xl"}>
+                            Регистрация
+                        </FieldsetLegend>
 
-                    <Separator />
+                        <Separator />
 
-                    <FieldsetContent>
-                        <HStack>
-                            <Field label="Имя" flex={0.8}>
-                                <Input name="name" type="text" placeholder="Иван" />
+                        <FieldsetContent>
+                            <Field label="Имя" required invalid={!!errors.name}>
+                                <Input id="name" type="text" placeholder="Иван" {...register("name")} />
+                                <FieldErrorText>
+                                    {errors.name?.message}
+                                </FieldErrorText>
                             </Field>
 
-                            <Field label="Фамилия" flex={1}>
-                                <Input name="surname" type="text" placeholder="Иванов" />
+                            <Field label="Фамилия" required invalid={!!errors.surname}>
+                                <Input id="surname" type="text" placeholder="Иванов" {...register("surname")} />
+                                <FieldErrorText>
+                                    {errors.surname?.message}
+                                </FieldErrorText>
                             </Field>
-                        </HStack>
-                        
-                        <Field label="Электронная почта">
-                            <Input name="email" type="email" placeholder="ivanov@example.com" />
-                        </Field>
+                            
+                            <Field label="Электронная почта" required invalid={!!errors.email}>
+                                <Input id="email" type="email" placeholder="ivanov@example.com" {...register("email")} />
+                                <FieldErrorText>
+                                    {errors.email?.message}
+                                </FieldErrorText>
+                            </Field>
 
-                        <Field label="Пароль">
-                            <Input name="password" type="password" placeholder="********" />
-                        </Field>
+                            <Field label="Пароль" required invalid={!!errors.password}>
+                                <Input id="password" type="password" placeholder="********" {...register("password")} />
+                                <FieldErrorText>
+                                    {errors.password?.message}
+                                </FieldErrorText>
+                            </Field>
 
-                        <Field label="Подтверждение пароля">
-                            <Input name="passwordConfirmation" type="password" placeholder="********" />
-                        </Field>
-                    </FieldsetContent>
+                            <Field label="Подтверждение пароля" required invalid={!!errors.passwordConfirmation}>
+                                <Input id="passwordConfirmation" type="password" placeholder="********" {...register("passwordConfirmation")} />
+                                <FieldErrorText>
+                                    {errors.passwordConfirmation?.message}
+                                </FieldErrorText>
+                            </Field>
+                        </FieldsetContent>
 
-                    <Button type="submit">
-                        Зарегистрироваться
-                    </Button>
+                        <Button type="submit">
+                            Зарегистрироваться
+                        </Button>
 
-                    <Link alignSelf={"center"}>
-                        Уже есть аккаунт? Войдите здесь
-                    </Link>
-                </FieldsetRoot>
-            </Center>
+                        <Link alignSelf={"center"}>
+                            Уже есть аккаунт? Войдите здесь
+                        </Link>
+                    </FieldsetRoot>
+                </Center>
+            </form>
 		</Flex>
     );
 };
