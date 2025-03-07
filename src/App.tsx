@@ -1,11 +1,9 @@
-import { Button, Flex } from '@chakra-ui/react';
 import './App.css'
+import RegisterForm from './components/RegisterForm';
 
 function App() {
 	return (
-		<Flex flex={1} align={"center"} justify={"center"}>
-			<Button variant={"outline"}>Hello!</Button>
-		</Flex>
+		<RegisterForm />
 	);
 };
 
