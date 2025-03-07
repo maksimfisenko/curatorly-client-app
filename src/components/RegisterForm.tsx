@@ -1,8 +1,18 @@
 import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Link, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 import { z } from "zod";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import publicApi from "@/config/api-client";
+import { useEffect, useState } from "react";
+import { toaster, Toaster } from "./ui/toaster";
+
+interface RegisterRequest {
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+}
 
 const registerFormSchema = z
     .object({
@@ -25,6 +35,9 @@ const registerFormSchema = z
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 const RegisterForm = () => {
+    const [error, setError] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false)
+    const [pending, setPending] = useState<boolean>(false)
 
     const {
         register,
@@ -34,9 +47,40 @@ const RegisterForm = () => {
         resolver: zodResolver(registerFormSchema)
     });
 
-    const handleFormSubmit = (registerRequest: FieldValues) => {
-        console.log('register request', registerRequest)
+    const handleFormSubmit = (registerRequest: RegisterRequest) => {
+        console.log('register request', registerRequest);
+
+        setPending(true);
+        setError(false);
+        setSuccess(false);
+        
+        publicApi.post("/api/v1/users/register", registerRequest)
+            .then(() => setSuccess(true))
+            .catch(() => setError(true))
+            .finally(() => setPending(false));
     };
+
+    useEffect(() => {
+        if (error) {
+            toaster.create({
+                type: "error",
+                title: "Ошибка",
+                description: "Пожалуйста, повторите попытку позже"
+            });
+            setError(false);
+        }
+    }, [error]);
+
+    useEffect(() => {
+        if (success) {
+            toaster.create({
+                type: "success",
+                title: "Аккаунт создан",
+                description: "Войдите в приложение"
+            });
+            setSuccess(false);
+        }
+    }, [success]);
 
     return (
         <Flex flex={1} align={"center"} justify={"center"}>
@@ -86,7 +130,7 @@ const RegisterForm = () => {
                             </Field>
                         </FieldsetContent>
 
-                        <Button type="submit">
+                        <Button type="submit" disabled={pending}>
                             Зарегистрироваться
                         </Button>
 
@@ -96,6 +140,8 @@ const RegisterForm = () => {
                     </FieldsetRoot>
                 </Center>
             </form>
+
+            <Toaster />
 		</Flex>
     );
 };
