@@ -1,9 +1,10 @@
-import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Link, Separator } from "@chakra-ui/react";
+import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginRequest } from "@/models";
+import { Link } from 'react-router';
 
 const loginFormSchema = z
     .object({
@@ -58,7 +59,7 @@ const LoginForm = ({isPending, onFormSubmit}: LoginFormProps) => {
                             Войти в аккаунт
                         </Button>
 
-                        <Link alignSelf={"center"}>
+                        <Link to={"/register"} style={{alignSelf: "center"}}>
                             Нет аккаунта? Зарегистрируйтесь
                         </Link>
                     </FieldsetRoot>

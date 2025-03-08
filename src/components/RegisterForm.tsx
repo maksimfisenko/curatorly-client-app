@@ -1,9 +1,10 @@
-import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Link, Separator } from "@chakra-ui/react";
+import { Button, Center, FieldErrorText, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterRequest } from "@/models";
+import { Link } from 'react-router';
 
 const registerFormSchema = z
     .object({
@@ -91,7 +92,7 @@ const RegisterForm = ({isPending, onFormSubmit}: RegisterFormProps) => {
                             Зарегистрироваться
                         </Button>
 
-                        <Link alignSelf={"center"}>
+                        <Link to={"/login"} style={{alignSelf: "center"}}>
                             Уже есть аккаунт? Войдите здесь
                         </Link>
                     </FieldsetRoot>

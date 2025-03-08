@@ -1,9 +1,17 @@
+import { Flex } from '@chakra-ui/react';
 import './App.css'
-import LoginPage from './pages/LoginPage';
+import { Link } from 'react-router';
 
 function App() {
 	return (
-		<LoginPage />
+		<Flex flexDirection={"column"} flex={1} align={"center"} justify={"center"}>
+			<Link to="/login">
+				Форма логина
+			</Link>
+			<Link to="/register">
+				Форма регистрации
+			</Link>
+		</Flex>
 	);
 };
 
