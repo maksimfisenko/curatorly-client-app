@@ -3,16 +3,7 @@ import { Field } from "@/components/ui/field"
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import publicApi from "@/config/api-client";
-import { useEffect, useState } from "react";
-import { toaster, Toaster } from "./ui/toaster";
-
-interface RegisterRequest {
-    name: string;
-    surname: string;
-    email: string;
-    password: string;
-}
+import { RegisterRequest } from "@/models";
 
 const registerFormSchema = z
     .object({
@@ -34,11 +25,12 @@ const registerFormSchema = z
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-const RegisterForm = () => {
-    const [error, setError] = useState<boolean>(false);
-    const [success, setSuccess] = useState<boolean>(false)
-    const [pending, setPending] = useState<boolean>(false)
+interface RegisterFormProps {
+    isPending: boolean;
+    onFormSubmit: (registerReqiest: RegisterRequest) => void;
+};
 
+const RegisterForm = ({isPending, onFormSubmit}: RegisterFormProps) => {
     const {
         register,
         handleSubmit,
@@ -47,44 +39,9 @@ const RegisterForm = () => {
         resolver: zodResolver(registerFormSchema)
     });
 
-    const handleFormSubmit = (registerRequest: RegisterRequest) => {
-        console.log('register request', registerRequest);
-
-        setPending(true);
-        setError(false);
-        setSuccess(false);
-        
-        publicApi.post("/api/v1/users/register", registerRequest)
-            .then(() => setSuccess(true))
-            .catch(() => setError(true))
-            .finally(() => setPending(false));
-    };
-
-    useEffect(() => {
-        if (error) {
-            toaster.create({
-                type: "error",
-                title: "Ошибка",
-                description: "Пожалуйста, повторите попытку позже"
-            });
-            setError(false);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (success) {
-            toaster.create({
-                type: "success",
-                title: "Аккаунт создан",
-                description: "Войдите в приложение"
-            });
-            setSuccess(false);
-        }
-    }, [success]);
-
     return (
         <Flex flex={1} align={"center"} justify={"center"}>
-            <form onSubmit={handleSubmit(handleFormSubmit)} autoComplete="off" noValidate>
+            <form onSubmit={handleSubmit(onFormSubmit)} autoComplete="off" noValidate>
                 <Center border={"1px solid"} borderRadius={"md"} p={6} width={"25vw"}>
                     <FieldsetRoot size={"lg"} maxW={"md"}>
                         <FieldsetLegend textAlign={"center"} fontSize={"xl"}>
@@ -130,7 +87,7 @@ const RegisterForm = () => {
                             </Field>
                         </FieldsetContent>
 
-                        <Button type="submit" disabled={pending}>
+                        <Button type="submit" disabled={isPending}>
                             Зарегистрироваться
                         </Button>
 
@@ -140,8 +97,6 @@ const RegisterForm = () => {
                     </FieldsetRoot>
                 </Center>
             </form>
-
-            <Toaster />
 		</Flex>
     );
 };
