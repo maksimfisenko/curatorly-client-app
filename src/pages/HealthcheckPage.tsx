@@ -1,4 +1,4 @@
-import HealthcheckInfo from "@/components/ui/HealthcheckInfo";
+import HealthcheckInfo from "@/components/HealthcheckInfo";
 import { useHealthcheck } from "@/usecases/useHealthcheck";
 
 const HealthcheckPage = () => {
