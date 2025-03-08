@@ -13,3 +13,11 @@ export interface LoginRequest {
 export interface AccessToken {
     token: string;
 }
+
+export interface HealthcheckResponse {
+    status: string;
+    systemInfo: {
+        environment: string;
+        version: string;
+    };
+}

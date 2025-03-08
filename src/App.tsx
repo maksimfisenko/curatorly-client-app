@@ -11,6 +11,9 @@ function App() {
 			<Link to="/register">
 				Форма регистрации
 			</Link>
+			<Link to="/healthcheck">
+				Healthcheck
+			</Link>
 		</Flex>
 	);
 };
