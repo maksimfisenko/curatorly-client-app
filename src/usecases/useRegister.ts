@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 const useRegister = () => {
     return useMutation<void, AxiosError, RegisterRequest>({
         mutationKey: ["register"],
-        mutationFn: (registerRequest: RegisterRequest) => publicApi.post("/api/v1/users/register", registerRequest)
+        mutationFn: (registerRequest: RegisterRequest) => publicApi.post("/api/v1/users", registerRequest)
     });
 };
 
