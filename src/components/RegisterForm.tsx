@@ -31,6 +31,11 @@ interface RegisterFormProps {
     onFormSubmit: (registerReqiest: RegisterRequest) => void;
 };
 
+const omitPasswordConfirmation = (data: RegisterFormData): RegisterRequest => {
+    const { passwordConfirmation, ...requestData } = data;
+    return requestData;
+};
+
 const RegisterForm = ({isPending, onFormSubmit}: RegisterFormProps) => {
     const {
         register,
@@ -42,7 +47,7 @@ const RegisterForm = ({isPending, onFormSubmit}: RegisterFormProps) => {
 
     return (
         <Flex flex={1} align={"center"} justify={"center"}>
-            <form onSubmit={handleSubmit(onFormSubmit)} autoComplete="off" noValidate>
+            <form onSubmit={handleSubmit((data) => onFormSubmit(omitPasswordConfirmation(data)))} autoComplete="off" noValidate>
                 <Center border={"1px solid"} borderRadius={"md"} p={6} width={"25vw"}>
                     <FieldsetRoot size={"lg"} maxW={"md"}>
                         <FieldsetLegend textAlign={"center"} fontSize={"xl"}>
