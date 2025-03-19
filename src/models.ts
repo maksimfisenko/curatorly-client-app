@@ -11,7 +11,7 @@ export interface LoginRequest {
 };
 
 export interface AccessToken {
-    token: string;
+    authentication_token: string;
 }
 
 export interface HealthcheckResponse {
