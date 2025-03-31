@@ -13,7 +13,10 @@ import { AxiosError } from "axios";
 const ProjectsPage = () => {
     const queryClient = useQueryClient();
     const { data } = useGetUserProjects();
-    const { mutate: mutateCreateProject, isPending: isPendingCreateProject } = useCreateProject();
+    const { 
+        mutate: mutateCreateProject, 
+        isPending: isPendingCreateProject 
+    } = useCreateProject();
     const { 
         mutate: mutateJoinProject,
         isPending: isPendingJoinProject,

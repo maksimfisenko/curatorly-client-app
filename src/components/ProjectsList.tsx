@@ -1,4 +1,6 @@
-import { Box, VStack, Text, Flex, Heading } from "@chakra-ui/react";
+import { Box, VStack, Text, Flex, Heading, PaginationRoot, ButtonGroup, PaginationPrevTrigger, IconButton, PaginationNextTrigger, PaginationItem, PaginationContext, PaginationEllipsis } from "@chakra-ui/react";
+import { useState } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
 
 interface Project {
     id: number;
@@ -13,12 +15,22 @@ interface ProjectsListProps {
 };
 
 const ProjectsList = ({projects}: ProjectsListProps) => {
+    const pageSize = 5;
+    const count = projects.length;
+
+    const [page, setPage] = useState(1)
+
+    const startRange = (page - 1) * pageSize
+    const endRange = startRange + pageSize
+
+    const visibleProjects = projects.slice(startRange, endRange)
+
     return (
         <Flex flex={1} m={10}>
             <VStack align={"stretch"} flex={1}>
-                <Heading alignSelf={"center"}>МОИ ПРОЕКТЫ</Heading>
+                <Heading alignSelf={"center"} mb={3}>МОИ ПРОЕКТЫ</Heading>
 
-                {projects.map((project) => (
+                {visibleProjects.map((project) => (
                     <Box key={project.id} border={"1px solid"} p={5} borderRadius={"lg"} boxShadow={"md"}>
                         <Text fontSize={"xl"} fontWeight={"bold"}>
                             {project.title}
@@ -28,6 +40,37 @@ const ProjectsList = ({projects}: ProjectsListProps) => {
                         </Text>
                     </Box>
                 ))}
+
+                <PaginationRoot count={count} pageSize={pageSize} page={page} onPageChange={(e) => setPage(e.page)}>
+                    <ButtonGroup variant={"outline"} size={"sm"}>
+                        <PaginationPrevTrigger asChild>
+                            <IconButton>
+                                <HiChevronLeft />
+                            </IconButton>
+                        </PaginationPrevTrigger>
+
+                        <PaginationContext>
+                            {({ pages }) => pages.map((page, index) =>
+                                page.type === "page" ? (
+                                    <PaginationItem key={index} {...page}>
+                                        <IconButton variant={{ base: "outline", _selected: "solid" }} zIndex={{ _selected: "1" }}>
+                                            {page.value}
+                                        </IconButton>
+                                    </PaginationItem>
+                                ) : (
+                                    <PaginationEllipsis key={index} index={index}>
+                                    </PaginationEllipsis>
+                                ),
+                            )}
+                        </PaginationContext>
+
+                        <PaginationNextTrigger asChild>
+                            <IconButton>
+                                <HiChevronRight />
+                            </IconButton>
+                        </PaginationNextTrigger>
+                    </ButtonGroup>
+                </PaginationRoot>
             </VStack>
         </Flex>
     );
