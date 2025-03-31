@@ -2,18 +2,22 @@ import CreateProjectForm from "@/components/CreateProjectForm";
 import JoinProjectForm from "@/components/JoinProjectForm";
 import ProjectsList from "@/components/ProjectsList";
 import { Toaster, toaster } from "@/components/ui/toaster";
-import { CreateProjectRequest, JoinProjectRequest } from "@/models";
+import { AxiosErrorResponseData, CreateProjectRequest, JoinProjectRequest } from "@/models";
 import { useCreateProject } from "@/usecases/useCreateProject";
 import { useGetUserProjects } from "@/usecases/useGetUserProjects";
 import { useJoinProject } from "@/usecases/useJoinProject";
 import { Box, Flex, Separator } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 const ProjectsPage = () => {
     const queryClient = useQueryClient();
     const { data } = useGetUserProjects();
     const { mutate: mutateCreateProject, isPending: isPendingCreateProject } = useCreateProject();
-    const { mutate: mutateJoinProject, isPending: isPendingJoinProject } = useJoinProject();
+    const { 
+        mutate: mutateJoinProject,
+        isPending: isPendingJoinProject,
+    } = useJoinProject();
 
     const handleCreateProject = (createProjectRequest: CreateProjectRequest) => {
         console.log("create project request", createProjectRequest);
@@ -49,11 +53,16 @@ const ProjectsPage = () => {
 
                 queryClient.invalidateQueries({ queryKey: ["get-user-projects"] });
             },
-            onError: () => {
+            onError: (error: AxiosError<AxiosErrorResponseData>) => {
+                const errorMessage = 
+                    error.response?.data?.error.user || 
+                    error.response?.data?.error.project || 
+                    "Произошла ошибка. Пожалуйста, повторите попытку позже";
+
                 toaster.create({
                     type: "error",
                     title: "Ошибка",
-                    description: "Пожалуйста, повторите попытку позже"
+                    description: errorMessage
                 });
             }
         });

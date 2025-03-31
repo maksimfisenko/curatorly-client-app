@@ -39,3 +39,10 @@ export interface CreateProjectRequest {
 export interface JoinProjectRequest {
     accessCode: string;
 };
+
+export interface AxiosErrorResponseData {
+    error: {
+        user?: string;
+        project?: string;
+    }
+}
