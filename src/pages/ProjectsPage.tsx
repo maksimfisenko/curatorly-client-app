@@ -31,8 +31,6 @@ const ProjectsPage = () => {
         data: userData
     } = useGetCurrentUser();
 
-    console.log(userData)
-
     if (userData?.user.email === "") {
         return (
             <Flex w="100%" h="100vh" align="center" justify="center">

@@ -55,3 +55,43 @@ export interface User {
         email: string;
     }
 };
+
+export interface CreateCourseRequest {
+    title: string;
+    academicYear: string;
+};
+
+export interface GetProjectCoursesResponse {
+    courses: {
+        id: number;
+        title: string;
+        academicYear: string;
+    }[];
+};
+
+export interface Course {
+    course: {
+        id: number;
+        title: string;
+        academicYear: string;
+        projectId: number;
+    }
+};
+
+export interface Project {
+    id: number;
+    title: string;
+    createdAt: string;
+    creatorId: number;
+    accessCode: string;
+};
+
+export interface GetProjectResponse {
+    project: {
+        id: number;
+        title: string;
+        createdAt: string;
+        creatorId: number;
+        accessCode: string;
+    }
+}

@@ -1,48 +1,55 @@
 import { Box, VStack, Text, Flex, Heading, PaginationRoot, ButtonGroup, PaginationPrevTrigger, IconButton, PaginationNextTrigger, PaginationItem, PaginationContext, PaginationEllipsis } from "@chakra-ui/react";
-import { Tooltip } from "@/components/ui/tooltip"
 import { useState } from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
-import { IoLogOutOutline } from "react-icons/io5";
-import { Link } from "react-router";
-import { Project } from "@/models";
 
-interface ProjectsListProps {
-    projects: Project[];
+interface Course {
+    id: number;
+    title: string;
+    academicYear: string;
+}
+
+interface CoursesListProps {
+    courses: Course[];
 };
 
-const ProjectsList = ({projects}: ProjectsListProps) => {
+const CoursesList = ({courses}: CoursesListProps) => {
     const pageSize = 5;
-    const count = projects.length;
+    const count = courses.length;
 
     const [page, setPage] = useState(1)
 
     const startRange = (page - 1) * pageSize
     const endRange = startRange + pageSize
 
-    const visibleProjects = projects.slice(startRange, endRange)
+    const visibleCourses = courses.slice(startRange, endRange)
+
+    if (count == 0) {
+        return (
+            <Flex flex={1} m={10}>
+            <VStack align={"stretch"} flex={1}>
+                <Heading alignSelf={"center"} mb={3}>КУРСЫ</Heading>
+                <Text alignSelf={"center"}>На данный момент в проекте нет ни одного курса</Text>
+            </VStack>
+        </Flex>
+        );
+    }
 
     return (
         <Flex flex={1} m={10}>
             <VStack align={"stretch"} flex={1}>
-                <Heading alignSelf={"center"} mb={3}>МОИ ПРОЕКТЫ</Heading>
+                <Heading alignSelf={"center"} mb={3}>КУРСЫ</Heading>
 
-                {visibleProjects.map((project) => (
-                    <Box key={project.id} border={"1px solid"} p={5} borderRadius={"lg"} boxShadow={"md"}>
+                {visibleCourses.map((course) => (
+                    <Box key={course.id} border={"1px solid"} p={5} borderRadius={"lg"} boxShadow={"md"}>
                         <Flex flex={1} flexDirection={"row"} justify={"space-between"} align={"center"}>
                             <VStack align={"start"}>
                                 <Text fontSize={"xl"} fontWeight={"bold"}>
-                                    <Link to={"/projects/" + project.id + "/courses"}>{project.title}</Link>
+                                    {course.title}
                                 </Text>
                                 <Text fontSize={"sm"} color={"gray.500"}>
-                                    Дата создания: {new Date(project.createdAt).toLocaleDateString("ru-RU")}
+                                    Учебный год: {course.academicYear}
                                 </Text>
                             </VStack>
-
-                            <Tooltip content="Покинуть проект" showArrow positioning={{placement: "left"}} openDelay={10} contentProps={{ css: { "--tooltip-bg": "red" } }}>
-                                <IconButton variant={"ghost"} color={"red"}>
-                                    <IoLogOutOutline />
-                                </IconButton>
-                            </Tooltip>
                         </Flex>
                     </Box>
                 ))}
@@ -82,4 +89,4 @@ const ProjectsList = ({projects}: ProjectsListProps) => {
     );
 };
 
-export default ProjectsList;
+export default CoursesList;

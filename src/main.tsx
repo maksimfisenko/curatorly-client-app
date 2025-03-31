@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage.tsx";
 import HealthcheckPage from "./pages/HealthcheckPage.tsx";
 import ProjectsPage from "./pages/ProjectsPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
+import CoursesPage from "./pages/CoursesPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
 						<Route path="/healthcheck" element={<HealthcheckPage />} />
 						<Route path="/projects" element={<ProjectsPage />} />
 						<Route path="/profile" element={<ProfilePage />} />
+						<Route path="/projects/:projectID/courses" element={<CoursesPage />} />
 					</Routes>
 				</BrowserRouter>
 			</Provider>
