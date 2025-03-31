@@ -21,3 +21,21 @@ export interface HealthcheckResponse {
         version: string;
     };
 }
+
+export interface GetUserProjectsResponse {
+    projects: {
+        id: number;
+        title: string;
+        createdAt: string;
+        creatorId: number;
+        accessCode: string;
+    }[];
+}
+
+export interface CreateProjectRequest {
+    title: string;
+};
+
+export interface JoinProjectRequest {
+    accessCode: string;
+};
