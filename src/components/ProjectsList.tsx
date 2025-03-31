@@ -1,6 +1,8 @@
 import { Box, VStack, Text, Flex, Heading, PaginationRoot, ButtonGroup, PaginationPrevTrigger, IconButton, PaginationNextTrigger, PaginationItem, PaginationContext, PaginationEllipsis } from "@chakra-ui/react";
+import { Tooltip } from "@/components/ui/tooltip"
 import { useState } from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
+import { IoLogOutOutline } from "react-icons/io5";
 
 interface Project {
     id: number;
@@ -32,12 +34,22 @@ const ProjectsList = ({projects}: ProjectsListProps) => {
 
                 {visibleProjects.map((project) => (
                     <Box key={project.id} border={"1px solid"} p={5} borderRadius={"lg"} boxShadow={"md"}>
-                        <Text fontSize={"xl"} fontWeight={"bold"}>
-                            {project.title}
-                        </Text>
-                        <Text fontSize={"sm"} color={"gray.500"}>
-                            Дата создания: {new Date(project.createdAt).toLocaleDateString("ru-RU")}
-                        </Text>
+                        <Flex flex={1} flexDirection={"row"} justify={"space-between"} align={"center"}>
+                            <VStack align={"start"}>
+                                <Text fontSize={"xl"} fontWeight={"bold"}>
+                                    {project.title}
+                                </Text>
+                                <Text fontSize={"sm"} color={"gray.500"}>
+                                    Дата создания: {new Date(project.createdAt).toLocaleDateString("ru-RU")}
+                                </Text>
+                            </VStack>
+
+                            <Tooltip content="Покинуть проект" showArrow positioning={{placement: "left"}} openDelay={10} contentProps={{ css: { "--tooltip-bg": "red" } }}>
+                                <IconButton variant={"ghost"} color={"red"}>
+                                    <IoLogOutOutline />
+                                </IconButton>
+                            </Tooltip>
+                        </Flex>
                     </Box>
                 ))}
 

@@ -12,7 +12,7 @@ export interface LoginRequest {
 
 export interface AccessToken {
     authentication_token: string;
-}
+};
 
 export interface HealthcheckResponse {
     status: string;
@@ -20,7 +20,7 @@ export interface HealthcheckResponse {
         environment: string;
         version: string;
     };
-}
+};
 
 export interface GetUserProjectsResponse {
     projects: {
@@ -30,7 +30,7 @@ export interface GetUserProjectsResponse {
         creatorId: number;
         accessCode: string;
     }[];
-}
+};
 
 export interface CreateProjectRequest {
     title: string;
@@ -45,4 +45,13 @@ export interface AxiosErrorResponseData {
         user?: string;
         project?: string;
     }
-}
+};
+
+export interface User {
+    user: {
+        id: number;
+        name: string;
+        surname: string;
+        email: string;
+    }
+};
