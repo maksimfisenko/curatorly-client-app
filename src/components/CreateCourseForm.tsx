@@ -1,4 +1,4 @@
-import { Button, Center, FieldErrorText, FieldLabel, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, NativeSelect, NativeSelectField, NativeSelectIndicator, NativeSelectRoot } from "@chakra-ui/react";
+import { Button, Center, FieldErrorText, FieldLabel, FieldsetContent, FieldsetLegend, FieldsetRoot, Flex, Input, NativeSelectField, NativeSelectIndicator, NativeSelectRoot } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 import { z } from "zod";
 import { CreateCourseRequest} from "@/models";

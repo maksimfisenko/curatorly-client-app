@@ -13,16 +13,13 @@ import { useGetProject } from "@/usecases/useGetProject";
 
 const CoursesPage = () => {
     const queryClient = useQueryClient();
-    const { data } = useGetProjectCourses();
 
-    const { 
-        mutate: mutateCreateCourse, 
-        isPending: isPendingCreateCourse
-    } = useCreateCourse();
+    const { projectID } = useParams<{ projectID: string }>();
 
-    const { 
-        data: userData
-    } = useGetCurrentUser();
+    const { data: userData } = useGetCurrentUser();
+    const { data: projectData } = useGetProject(projectID ?? "0");
+    const { data: coursesData } = useGetProjectCourses(projectID ?? "0");
+    const { mutate: mutateCreateCourse, isPending: isPendingCreateCourse } = useCreateCourse(projectID ?? "0");
 
     if (userData?.user.email === "") {
         return (
@@ -31,9 +28,6 @@ const CoursesPage = () => {
             </Flex>
         );
     }
-
-    const { projectID } = useParams<{ projectID: string }>();
-    const { data: projectData } = useGetProject(projectID ?? "0");
 
     const handleCreateCourse = (createCourseRequest: CreateCourseRequest) => {
         console.log("create course request", createCourseRequest);
@@ -57,6 +51,8 @@ const CoursesPage = () => {
         });
     };
 
+    console.log(projectData)
+
     return (
         <Flex w={"100%"} flexDirection={"column"}>
             <Header userName={userData?.user.name ?? ""} userSurname={userData?.user.surname ?? " "} />
@@ -65,7 +61,7 @@ const CoursesPage = () => {
                 <Flex flex={0.2} flexDirection={"column"} justifyContent={"flex-start"} m={5}>
                     <CreateCourseForm isPending={isPendingCreateCourse} onFormSubmit={handleCreateCourse} />
                 </Flex>
-                <CoursesList courses={data?.courses ?? []} />
+                <CoursesList courses={coursesData?.courses ?? []} />
                 <Toaster />
             </Flex>
         </Flex>

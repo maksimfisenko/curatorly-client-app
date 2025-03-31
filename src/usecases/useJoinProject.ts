@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 const useJoinProject = () => {
     return useMutation<void, AxiosError<AxiosErrorResponseData>, JoinProjectRequest>({
         mutationKey: ["join-project"],
-        mutationFn: (joinProjectRequest: JoinProjectRequest) => publicApi.post("/api/v1/projects/add-user", joinProjectRequest)
+        mutationFn: (joinProjectRequest: JoinProjectRequest) => publicApi.post("/api/v1/add-users", joinProjectRequest)
     });
 };
 
