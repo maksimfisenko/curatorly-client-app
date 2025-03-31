@@ -1,6 +1,7 @@
 import CreateProjectForm from "@/components/CreateProjectForm";
 import JoinProjectForm from "@/components/JoinProjectForm";
 import ProjectsList from "@/components/ProjectsList";
+import ThemeToggle from "@/components/ThemeToggle";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { AxiosErrorResponseData, CreateProjectRequest, JoinProjectRequest } from "@/models";
 import { useCreateProject } from "@/usecases/useCreateProject";
@@ -79,6 +80,7 @@ const ProjectsPage = () => {
                 <JoinProjectForm isPending={isPendingJoinProject} onFormSubmit={handleJoinProject} />
             </Flex>
             <ProjectsList projects={data?.projects ?? []} />
+            <ThemeToggle />
             <Toaster />
         </Box>
     );
