@@ -1,6 +1,6 @@
 import { AvatarFallback, AvatarRoot, Box, Button, Flex, Heading, HStack, MenuContent, MenuItem, MenuPositioner, MenuRoot, MenuTrigger, Portal } from "@chakra-ui/react";
 import ThemeToggle from "./ThemeToggle";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 
 interface HeaderProps {
@@ -19,7 +19,7 @@ const Header = ({userName, userSurname}: HeaderProps) => {
     return (
         <Box borderBottom={"1px solid"}>
             <Flex justify={"space-between"} align={"center"} my={1} mx={3}>
-                <Heading fontWeight={"bold"}>CuratorLy</Heading>
+                <Heading fontWeight={"bold"}><Link to="/projects">CuratorLy</Link></Heading>
                 <HStack>
                     <MenuRoot>
                         <MenuTrigger asChild>
@@ -33,7 +33,7 @@ const Header = ({userName, userSurname}: HeaderProps) => {
                         <Portal>
                             <MenuPositioner>
                                 <MenuContent>
-                                    <MenuItem value="profile">Мой профиль</MenuItem>
+                                    <MenuItem value="profile"><Link to="/profile">Мой профиль</Link></MenuItem>
                                     <MenuItem value="logout" color="fg.error" _hover={{ bg: "bg.error", color: "fg.error" }} onClick={handleLogout}>Выйти</MenuItem>
                                 </MenuContent>
                             </MenuPositioner>
