@@ -1,6 +1,8 @@
 import AddCuratorForm from "@/components/AddCuratorForm";
 import Header from "@/components/Header";
+import { Toaster, toaster } from "@/components/ui/toaster";
 import { AddCuratorRequest } from "@/models";
+import { useAddCurator } from "@/usecases/useAddCurator";
 import { useGetCurrentUser } from "@/usecases/useGetCurrentUser";
 import { useGetProject } from "@/usecases/useGetProject";
 import { Breadcrumb, BreadcrumbCurrentLink, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbRoot, BreadcrumbSeparator, Flex, Heading } from "@chakra-ui/react";
@@ -11,6 +13,7 @@ const AddCuratorPage = () => {
 
     const { data: projectData } = useGetProject(projectID ?? "0");
     const { data: userData } = useGetCurrentUser();
+    const { mutate: mutateAddCurator, isPending: isPendingAddCurator } = useAddCurator(projectID ?? "0");
 
     if (userData?.user.email === "") {
         return (
@@ -22,7 +25,24 @@ const AddCuratorPage = () => {
 
     const handleAddCurator = (addCuratorRequest: AddCuratorRequest) => {
         console.log(addCuratorRequest);
+
+        mutateAddCurator(addCuratorRequest, {
+            onSuccess: () => {
+                toaster.create({
+                    type: "success",
+                     title: "Куратор успешно добавлен"
+                });
+            },
+            onError: () => {
+                toaster.create({
+                    type: "error",
+                    title: "Ошибка",
+                    description: "Пожалуйста, повторите попытку позже"
+                });
+            }
+        });
     };
+
 
     return (
         <Flex w={"100%"} flexDirection={"column"}>
@@ -46,8 +66,8 @@ const AddCuratorPage = () => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </BreadcrumbRoot>
-            {/* <Heading alignSelf={"center"} m={5} size={"3xl"}>{projectData?.project.title.toUpperCase()}</Heading> */}
-            <AddCuratorForm isPending={false} onFormSubmit={handleAddCurator} />
+            <AddCuratorForm isPending={isPendingAddCurator} onFormSubmit={handleAddCurator} />
+            <Toaster />
         </Flex>
     );
 };
