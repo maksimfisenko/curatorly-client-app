@@ -94,4 +94,8 @@ export interface GetProjectResponse {
         creatorId: number;
         accessCode: string;
     }
-}
+};
+
+export interface AddCuratorRequest {
+
+};

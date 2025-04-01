@@ -51,8 +51,6 @@ const CoursesPage = () => {
         });
     };
 
-    console.log(projectData)
-
     return (
         <Flex w={"100%"} flexDirection={"column"}>
             <Header userName={userData?.user.name ?? ""} userSurname={userData?.user.surname ?? " "} />
